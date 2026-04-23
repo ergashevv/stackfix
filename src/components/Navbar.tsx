@@ -10,14 +10,16 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     
-    // Initial theme setup
+    // Initial theme setup from current class
     if (document.documentElement.classList.contains("dark")) {
       setTheme("dark");
     } else {
@@ -30,7 +32,13 @@ export default function Navbar() {
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
-    document.documentElement.classList.toggle("dark");
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
   };
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>, id: string) => {
@@ -101,7 +109,7 @@ export default function Navbar() {
                 className="p-2.5 rounded-2xl hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
                 aria-label="Toggle theme"
               >
-                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+                {mounted ? (theme === "dark" ? <Sun size={18} /> : <Moon size={18} />) : <div className="w-[18px] h-[18px]" />}
               </button>
               <button
                 onClick={(e) => scrollToSection(e, "#demo")}
@@ -118,7 +126,7 @@ export default function Navbar() {
                onClick={toggleTheme}
                className="p-2 rounded-xl bg-muted/50 text-foreground"
             >
-               {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+               {mounted ? (theme === "dark" ? <Sun size={18} /> : <Moon size={18} />) : <div className="w-[18px] h-[18px]" />}
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

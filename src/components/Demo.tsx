@@ -151,39 +151,39 @@ export default function Demo() {
       cleanCode = code.trim();
     }
     
-    // 2. Escape HTML first
-    let html = cleanCode
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+    // 2. Escape utility
+    const escape = (str: string) => str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-    // 3. Extract strings and comments to avoid internal highlighting
-    const strings: string[] = [];
-    const comments: string[] = [];
+    // 3. Define token patterns (Single pass regex to avoid nesting)
+    // Priority: Comments > Strings > Keywords > Constants > Functions > Classes > Numbers
+    const tokenRegex = /(\/\/.+)|(['"`].*?['"`])|\b(const|let|var|function|return|if|else|for|while|import|export|from|class|try|catch|async|await|def|with|as|yield|lambda|type|interface|enum)\b|\b(true|false|null|undefined|None)\b|(\w+)(?=\s*\()|\b([A-Z]\w+)\b|\b(\d+)\b/g;
+
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = tokenRegex.exec(cleanCode)) !== null) {
+      // Add text before the match
+      parts.push(escape(cleanCode.substring(lastIndex, match.index)));
+      
+      const [full, com, str, key, con, fn, cls, num] = match;
+      
+      if (com) parts.push(`<span class="text-slate-500 italic">${escape(com)}</span>`);
+      else if (str) parts.push(`<span class="text-[#98c379]">${escape(str)}</span>`);
+      else if (key) parts.push(`<span class="text-[#c678dd]">${key}</span>`);
+      else if (con) parts.push(`<span class="text-[#56b6c2]">${con}</span>`);
+      else if (fn) parts.push(`<span class="text-[#61afef]">${fn}</span>`);
+      else if (cls) parts.push(`<span class="text-[#e5c07b]">${cls}</span>`);
+      else if (num) parts.push(`<span class="text-[#d19a66]">${num}</span>`);
+      else parts.push(escape(full));
+
+      lastIndex = tokenRegex.lastIndex;
+    }
     
-    html = html.replace(/(['"`].*?['"`])/g, (match) => {
-      strings.push(match);
-      return `__STR_${strings.length - 1}__`;
-    });
-    
-    html = html.replace(/(\/\/.+)/g, (match) => {
-      comments.push(match);
-      return `__COM_${comments.length - 1}__`;
-    });
+    // Add remaining text
+    parts.push(escape(cleanCode.substring(lastIndex)));
 
-    // 4. Highlight keywords and logic
-    html = html
-      .replace(/\b(const|let|var|function|return|if|else|for|while|import|export|from|class|try|catch|async|await|def|with|as|yield|lambda|type|interface|enum)\b/g, '<span class="text-[#c678dd]">$1</span>') // Keywords (Purple)
-      .replace(/\b(\d+)\b/g, '<span class="text-[#d19a66]">$1</span>') // Numbers (Orange)
-      .replace(/\b(true|false|null|undefined|None)\b/g, '<span class="text-[#56b6c2]">$1</span>') // Booleans/Constants (Cyan)
-      .replace(/(\w+)(?=\s*\()/g, '<span class="text-[#61afef]">$1</span>') // Functions (Blue)
-      .replace(/\b([A-Z]\w+)\b/g, '<span class="text-[#e5c07b]">$1</span>'); // Classes/Types (Yellow)
-
-    // 5. Restore strings and comments
-    html = html.replace(/__STR_(\d+)__/g, (_, i) => `<span class="text-[#98c379]">${strings[parseInt(i)]}</span>`);
-    html = html.replace(/__COM_(\d+)__/g, (_, i) => `<span class="text-slate-500 italic">${comments[parseInt(i)]}</span>`);
-
-    return html;
+    return parts.join("");
   };
 
   const MarkdownText = ({ text }: { text: string }) => {
