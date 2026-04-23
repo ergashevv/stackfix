@@ -205,8 +205,8 @@ export default function Demo() {
   return (
     <section id="demo" className="py-32 bg-background relative overflow-hidden noise-bg">
       {/* Immersive Background Elements */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-brand/10 blur-[180px] rounded-full pointer-events-none -z-10 animate-pulse" />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent-amber/10 blur-[150px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/4 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-brand/10 blur-[80px] md:blur-[180px] rounded-full pointer-events-none -z-10 md:animate-pulse" />
+      <div className="absolute bottom-0 right-1/4 w-[250px] md:w-[500px] h-[250px] md:h-[500px] bg-accent-amber/10 blur-[70px] md:blur-[150px] rounded-full pointer-events-none -z-10" />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center mb-24">
@@ -235,10 +235,10 @@ export default function Demo() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col gap-6 sticky top-32"
+            className="flex flex-col gap-6 lg:sticky lg:top-32"
           >
-            <div className="rounded-[2.5rem] border border-border/50 bg-card/50 backdrop-blur-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] overflow-hidden ring-1 ring-white/10 premium-shadow">
-              <div className="flex items-center justify-between px-8 py-6 border-b border-border/50 bg-muted/20">
+            <div className="rounded-[2.5rem] border border-border/50 bg-card/50 backdrop-blur-xl md:backdrop-blur-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] overflow-hidden ring-1 ring-white/10 premium-shadow">
+              <div className="flex items-center justify-between px-6 py-5 md:px-8 md:py-6 border-b border-border/50 bg-muted/20">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-xl bg-brand/10 text-brand">
                     <Terminal size={18} />
@@ -259,7 +259,7 @@ export default function Demo() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Paste raw stack trace, console logs, or problematic code blocks here..."
-                  className="w-full h-[400px] p-8 bg-transparent resize-none focus:outline-none font-mono text-sm leading-relaxed placeholder:text-muted-foreground/40 custom-scrollbar"
+                  className="w-full h-[300px] md:h-[400px] p-5 md:p-8 bg-transparent resize-none focus:outline-none font-mono text-sm leading-relaxed placeholder:text-muted-foreground/40 custom-scrollbar"
                 />
               </div>
               <div className="p-6 border-t border-border/50 bg-muted/10">
@@ -306,7 +306,7 @@ export default function Demo() {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="rounded-[2.5rem] border border-border/50 bg-card/80 backdrop-blur-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] min-h-[700px] flex flex-col overflow-hidden ring-1 ring-white/10 premium-shadow"
+            className="rounded-[2.5rem] border border-border/50 bg-card/80 backdrop-blur-xl md:backdrop-blur-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] min-h-[700px] flex flex-col overflow-hidden ring-1 ring-white/10 premium-shadow"
           >
             <div className="flex items-center justify-between px-8 py-6 border-b border-border/50 bg-muted/20">
               <div className="flex items-center gap-3">
