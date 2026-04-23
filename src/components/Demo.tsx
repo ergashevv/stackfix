@@ -141,15 +141,18 @@ export default function Demo() {
 
   const highlightCode = (code: string) => {
     if (!code) return "";
-    // Basic syntax highlighting for the demo
+    // Basic syntax highlighting for the demo - Refined for "Studio Edition"
     return code
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") // Escape HTML
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;") // Escape HTML
       .replace(/(\/\/.+)/g, '<span class="text-slate-500 italic">$1</span>') // Comments
-      .replace(/\b(const|let|var|function|return|if|else|for|while|import|export|from|class|try|catch|async|await|def|class|with|as|yield|lambda)\b/g, '<span class="text-[#ff7b72]">$1</span>') // Keywords
-      .replace(/(['"`].*?['"`])/g, '<span class="text-[#a5d6ff]">$1</span>') // Strings
-      .replace(/\b(\d+)\b/g, '<span class="text-[#d299ff]">$1</span>') // Numbers
-      .replace(/\b(true|false|null|undefined|None)\b/g, '<span class="text-[#79c0ff]">$1</span>') // Booleans/Null
-      .replace(/(\w+)(?=\s*\()/g, '<span class="text-[#d2a8ff]">$1</span>'); // Functions
+      .replace(/\b(const|let|var|function|return|if|else|for|while|import|export|from|class|try|catch|async|await|def|class|with|as|yield|lambda|type|interface|enum)\b/g, '<span class="text-[#c678dd]">$1</span>') // Keywords (Purple)
+      .replace(/(['"`].*?['"`])/g, '<span class="text-[#98c379]">$1</span>') // Strings (Green)
+      .replace(/\b(\d+)\b/g, '<span class="text-[#d19a66]">$1</span>') // Numbers (Orange)
+      .replace(/\b(true|false|null|undefined|None)\b/g, '<span class="text-[#56b6c2]">$1</span>') // Booleans/Constants (Cyan)
+      .replace(/(\w+)(?=\s*\()/g, '<span class="text-[#61afef]">$1</span>') // Functions (Blue)
+      .replace(/(?:^|\s|\()([A-Z]\w+)\b/g, '<span class="text-[#e5c07b]">$1</span>'); // Classes/Types (Yellow)
   };
 
   const MarkdownText = ({ text }: { text: string }) => {
@@ -453,60 +456,85 @@ export default function Demo() {
                       </div>
                     </section>
 
-                    {/* Smart Fix Preview - Diff Style */}
-                    <section className="space-y-4">
+                    {/* Smart Fix Preview - Modern Studio Style */}
+                    <section className="space-y-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Zap className="text-brand" size={18} />
-                          <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Instant Fix Preview</h4>
+                          <Zap className="text-brand" size={20} />
+                          <h4 className="text-sm font-black uppercase tracking-[0.2em] text-foreground/80">Code Reconstruction</h4>
                         </div>
-                        <div className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20 flex items-center gap-1.5">
-                          <CheckCircle2 size={12} />
-                          Recommended Solution
+                        <div className="px-4 py-1.5 rounded-full bg-accent-emerald/10 text-accent-emerald text-[10px] font-bold uppercase tracking-wider border border-accent-emerald/20 flex items-center gap-2 shadow-sm">
+                          <CheckCircle2 size={14} />
+                          Verified Fix
                         </div>
                       </div>
                       
-                      <p className="text-sm text-muted-foreground italic mb-2">"<MarkdownText text={result.fix_summary} />"</p>
+                      <div className="p-4 rounded-2xl bg-brand/5 border border-brand/10 border-l-4 border-l-brand italic">
+                        <p className="text-sm text-foreground/70 leading-relaxed font-medium">
+                          "<MarkdownText text={result.fix_summary} />"
+                        </p>
+                      </div>
 
                       {(result.before_code || result.after_code) && (
-                        <div className="rounded-2xl overflow-hidden border border-border shadow-lg">
-                          {/* Before Code */}
+                        <div className="space-y-6">
+                          {/* Before Code Block */}
                           {result.before_code && (
-                            <div className="bg-[#0d1117] border-b border-white/5">
-                              <div className="flex items-center justify-between px-4 py-2 bg-red-500/10">
-                                <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest flex items-center gap-1.5">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Before
-                                </span>
+                            <div className="group relative rounded-3xl overflow-hidden border border-border/50 bg-[#1e1e1e] shadow-2xl transition-all hover:border-red-500/30">
+                              <div className="flex items-center justify-between px-6 py-4 bg-red-500/5 border-b border-white/5">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
+                                  <span className="text-[10px] font-black text-red-400 uppercase tracking-[0.2em]">Legacy (Problematic)</span>
+                                </div>
                                 <button 
                                   onClick={() => copyToClipboard(result.before_code, "before")}
-                                  className="text-[10px] text-muted-foreground hover:text-brand transition-colors"
+                                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-muted-foreground hover:text-foreground transition-all border border-white/5"
                                 >
-                                  {copied === "before" ? <Check size={12} /> : <Copy size={12} />}
+                                  {copied === "before" ? (
+                                    <> <Check size={14} className="text-emerald-500" /> <span className="text-[10px] uppercase">Copied</span> </>
+                                  ) : (
+                                    <> <Copy size={14} /> <span className="text-[10px] uppercase">Copy</span> </>
+                                  )}
                                 </button>
                               </div>
-                              <pre className="p-5 text-sm font-mono overflow-x-auto text-red-200/70 bg-red-500/[0.02]">
-                                <code dangerouslySetInnerHTML={{ __html: highlightCode(result.before_code) }} />
-                              </pre>
+                              <div className="relative">
+                                <pre className="p-8 text-[13px] font-mono leading-relaxed overflow-x-auto custom-scrollbar-mini max-h-[400px]">
+                                  <code 
+                                    className="block"
+                                    dangerouslySetInnerHTML={{ __html: highlightCode(result.before_code) }} 
+                                  />
+                                </pre>
+                              </div>
                             </div>
                           )}
                           
-                          {/* After Code */}
+                          {/* After Code Block */}
                           {result.after_code && (
-                            <div className="bg-[#0d1117]">
-                              <div className="flex items-center justify-between px-4 py-2 bg-emerald-500/10">
-                                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> After (Fixed)
-                                </span>
+                            <div className="group relative rounded-3xl overflow-hidden border border-brand/30 bg-[#1e1e1e] shadow-[0_20px_50px_rgba(79,70,229,0.15)] transition-all ring-1 ring-brand/10">
+                              <div className="flex items-center justify-between px-6 py-4 bg-brand/5 border-b border-white/5">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-2 h-2 rounded-full bg-brand shadow-[0_0_8px_rgba(79,70,229,0.5)]" />
+                                  <span className="text-[10px] font-black text-brand uppercase tracking-[0.2em]">Optimized Solution</span>
+                                </div>
                                 <button 
                                   onClick={() => copyToClipboard(result.after_code, "after")}
-                                  className="text-[10px] text-muted-foreground hover:text-brand transition-colors"
+                                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand text-brand-foreground hover:bg-brand/90 text-xs font-black transition-all shadow-lg shadow-brand/20 active:scale-95"
                                 >
-                                  {copied === "after" ? <Check size={12} /> : <Copy size={12} />}
+                                  {copied === "after" ? (
+                                    <> <Check size={14} /> <span className="text-[10px] uppercase">Copied!</span> </>
+                                  ) : (
+                                    <> <Copy size={14} /> <span className="text-[10px] uppercase">Copy Fixed Code</span> </>
+                                  )}
                                 </button>
                               </div>
-                              <pre className="p-5 text-sm font-mono overflow-x-auto text-emerald-200 bg-emerald-500/[0.02]">
-                                <code dangerouslySetInnerHTML={{ __html: highlightCode(result.after_code) }} />
-                              </pre>
+                              <div className="relative">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 blur-3xl pointer-events-none" />
+                                <pre className="p-8 text-[13px] font-mono leading-relaxed overflow-x-auto custom-scrollbar-mini max-h-[500px]">
+                                  <code 
+                                    className="block"
+                                    dangerouslySetInnerHTML={{ __html: highlightCode(result.after_code) }} 
+                                  />
+                                </pre>
+                              </div>
                             </div>
                           )}
                         </div>
