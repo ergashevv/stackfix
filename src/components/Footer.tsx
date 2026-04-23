@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { Terminal, Mail, MapPin, Share, Code, Globe } from "lucide-react";
