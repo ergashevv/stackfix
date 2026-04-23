@@ -15,6 +15,10 @@
   --radius-3xl: 2.5rem;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;

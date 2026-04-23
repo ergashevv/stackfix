@@ -6,6 +6,22 @@ import { ArrowRight, Sparkles, Zap, ShieldCheck, Database } from "lucide-react";
 import Link from "next/link";
 
 export default function Hero() {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id.replace("#", ""));
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
   return (
     <section className="relative pt-40 pb-24 overflow-hidden hero-gradient noise-bg">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
@@ -38,19 +54,19 @@ export default function Hero() {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
-              <Link
-                href="#demo"
+              <button
+                onClick={() => scrollToSection("#demo")}
                 className="group relative px-10 py-5 bg-brand text-brand-foreground rounded-3xl font-bold flex items-center gap-3 overflow-hidden shadow-2xl shadow-brand/20 hover:scale-[1.02] transition-all active:scale-95"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 Try Interactive Demo <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                href="#how-it-works"
+              </button>
+              <button
+                onClick={() => scrollToSection("#how-it-works")}
                 className="px-10 py-5 bg-background/50 backdrop-blur-xl text-foreground border border-border rounded-3xl font-bold hover:bg-muted transition-all active:scale-95"
               >
                 Our Methodology
-              </Link>
+              </button>
             </div>
 
             {/* Social Proof / Tech Logos */}

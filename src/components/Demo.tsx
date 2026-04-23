@@ -456,87 +456,6 @@ export default function Demo() {
                       </div>
                     </section>
 
-                    {/* Smart Fix Preview - Modern Professional Comparison */}
-                    <section className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Zap className="text-brand" size={22} />
-                          <h4 className="text-sm font-black uppercase tracking-[0.2em] text-foreground/80">Code Reconstruction</h4>
-                        </div>
-                        <div className="px-4 py-1.5 rounded-full bg-accent-emerald/10 text-accent-emerald text-[10px] font-black uppercase tracking-[0.2em] border border-accent-emerald/20 flex items-center gap-2 shadow-sm">
-                          <CheckCircle2 size={14} strokeWidth={3} />
-                          Suggested Fix
-                        </div>
-                      </div>
-                      
-                      <div className="p-5 rounded-3xl bg-muted/30 border border-border shadow-inner-premium group">
-                        <p className="text-sm text-foreground/70 leading-relaxed font-semibold italic">
-                          "<MarkdownText text={result.fix_summary} />"
-                        </p>
-                      </div>
-
-                      {(result.before_code || result.after_code) && (
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          {/* Before Code Block */}
-                          {result.before_code && (
-                            <div className="group relative rounded-3xl overflow-hidden border border-border bg-card/50 shadow-lg flex flex-col h-full">
-                              <div className="flex items-center justify-between px-6 py-4 bg-red-500/10 border-b border-border/50">
-                                <div className="flex items-center gap-2">
-                                  <div className="w-2 h-2 rounded-full bg-red-500" />
-                                  <span className="text-[10px] font-black text-red-500 uppercase tracking-widest">Problematic</span>
-                                </div>
-                                <button 
-                                  onClick={() => copyToClipboard(result.before_code, "before")}
-                                  className="p-2 rounded-xl bg-background border border-border text-muted-foreground hover:text-red-500 hover:border-red-500/30 transition-all flex items-center gap-2"
-                                  title="Copy Original Code"
-                                >
-                                  {copied === "before" ? <Check size={14} /> : <Copy size={14} />}
-                                  <span className="text-[10px] font-bold uppercase">Copy</span>
-                                </button>
-                              </div>
-                              <div className="flex-1 bg-[#1e1e2e] dark:bg-[#0d1117] overflow-hidden">
-                                <pre className="p-6 text-[12px] font-mono leading-relaxed overflow-x-auto custom-scrollbar-mini max-h-[350px]">
-                                  <code 
-                                    className="block"
-                                    dangerouslySetInnerHTML={{ __html: highlightCode(result.before_code) }} 
-                                  />
-                                </pre>
-                              </div>
-                            </div>
-                          )}
-                          
-                          {/* After Code Block */}
-                          {result.after_code && (
-                            <div className="group relative rounded-3xl overflow-hidden border-2 border-brand/20 bg-card shadow-2xl flex flex-col h-full ring-2 ring-brand/5">
-                              <div className="flex items-center justify-between px-6 py-4 bg-brand/10 border-b border-brand/20">
-                                <div className="flex items-center gap-2">
-                                  <div className="w-2 h-2 rounded-full bg-brand animate-pulse" />
-                                  <span className="text-[10px] font-black text-brand uppercase tracking-widest">Fixed Solution</span>
-                                </div>
-                                <button 
-                                  onClick={() => copyToClipboard(result.after_code, "after")}
-                                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand text-brand-foreground hover:scale-105 active:scale-95 text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-brand/30"
-                                >
-                                  {copied === "after" ? (
-                                    <> <Check size={14} /> <span>Copied!</span> </>
-                                  ) : (
-                                    <> <Copy size={14} /> <span>Copy Fix</span> </>
-                                  )}
-                                </button>
-                              </div>
-                              <div className="flex-1 bg-[#1e1e2e] dark:bg-[#0d1117] overflow-hidden">
-                                <pre className="p-6 text-[12px] font-mono leading-relaxed overflow-x-auto custom-scrollbar-mini max-h-[350px]">
-                                  <code 
-                                    className="block"
-                                    dangerouslySetInnerHTML={{ __html: highlightCode(result.after_code) }} 
-                                  />
-                                </pre>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </section>
 
                     {/* Stack Overflow Links */}
                     <section className="pt-8 border-t border-border">
@@ -637,6 +556,104 @@ export default function Demo() {
             </div>
           </motion.div>
         </div>
+
+        {/* Smart Fix Preview - Modern Professional Comparison - FULL WIDTH VERSION */}
+        <AnimatePresence>
+          {result && !isAnalyzing && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="mt-12 max-w-7xl mx-auto"
+            >
+              <section className="space-y-8 p-10 rounded-[2.5rem] border border-border/50 bg-card/50 backdrop-blur-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] overflow-hidden ring-1 ring-white/10 premium-shadow">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-2xl bg-brand/10 text-brand">
+                      <Zap size={24} />
+                    </div>
+                    <div className="flex flex-col">
+                      <h4 className="text-lg font-black uppercase tracking-[0.2em] text-foreground/90">Code Reconstruction</h4>
+                      <span className="text-[10px] text-muted-foreground font-bold tracking-widest uppercase">Delta-Based Refactoring</span>
+                    </div>
+                  </div>
+                  <div className="px-5 py-2 rounded-full bg-accent-emerald/10 text-accent-emerald text-[11px] font-black uppercase tracking-[0.2em] border border-accent-emerald/20 flex items-center gap-2 shadow-sm">
+                    <CheckCircle2 size={16} strokeWidth={3} />
+                    Suggested Fix
+                  </div>
+                </div>
+                
+                <div className="p-6 rounded-3xl bg-muted/30 border border-border/50 shadow-inner-premium group">
+                  <p className="text-lg text-foreground/80 leading-relaxed font-semibold italic">
+                    "<MarkdownText text={result.fix_summary} />"
+                  </p>
+                </div>
+
+                {(result.before_code || result.after_code) && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Before Code Block */}
+                    {result.before_code && (
+                      <div className="group relative rounded-[2rem] overflow-hidden border border-border/50 bg-card/40 shadow-xl flex flex-col h-full transition-all hover:border-red-500/30">
+                        <div className="flex items-center justify-between px-8 py-5 bg-red-500/5 border-b border-border/50">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
+                            <span className="text-[11px] font-black text-red-500 uppercase tracking-widest">Problematic Content</span>
+                          </div>
+                          <button 
+                            onClick={() => copyToClipboard(result.before_code, "before")}
+                            className="p-2.5 rounded-xl bg-background border border-border text-muted-foreground hover:text-red-500 hover:border-red-500/30 transition-all flex items-center gap-2 group-hover:shadow-lg"
+                            title="Copy Original Code"
+                          >
+                            {copied === "before" ? <Check size={14} /> : <Copy size={14} />}
+                            <span className="text-[11px] font-black uppercase">Copy</span>
+                          </button>
+                        </div>
+                        <div className="flex-1 bg-[#0b0e14] overflow-hidden">
+                          <pre className="p-8 text-[13px] font-mono leading-relaxed overflow-x-auto custom-scrollbar-mini max-h-[500px]">
+                            <code 
+                              className="block"
+                              dangerouslySetInnerHTML={{ __html: highlightCode(result.before_code) }} 
+                            />
+                          </pre>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* After Code Block */}
+                    {result.after_code && (
+                      <div className="group relative rounded-[2rem] overflow-hidden border-2 border-brand/30 bg-card shadow-2xl flex flex-col h-full ring-4 ring-brand/5 transition-all hover:border-brand/60">
+                        <div className="flex items-center justify-between px-8 py-5 bg-brand/5 border-b border-brand/20">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-brand animate-pulse shadow-[0_0_15px_rgba(var(--brand-rgb),0.6)]" />
+                            <span className="text-[11px] font-black text-brand uppercase tracking-widest">Refined Solution</span>
+                          </div>
+                          <button 
+                            onClick={() => copyToClipboard(result.after_code, "after")}
+                            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-brand text-brand-foreground hover:scale-105 active:scale-95 text-[11px] font-black uppercase tracking-widest transition-all shadow-xl shadow-brand/30"
+                          >
+                            {copied === "after" ? (
+                              <> <Check size={16} /> <span>Copied!</span> </>
+                            ) : (
+                              <> <Copy size={16} /> <span>Apply Optimized Fix</span> </>
+                            )}
+                          </button>
+                        </div>
+                        <div className="flex-1 bg-[#0b0e14] overflow-hidden">
+                          <pre className="p-8 text-[13px] font-mono leading-relaxed overflow-x-auto custom-scrollbar-mini max-h-[500px]">
+                            <code 
+                              className="block"
+                              dangerouslySetInnerHTML={{ __html: highlightCode(result.after_code) }} 
+                            />
+                          </pre>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </section>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );

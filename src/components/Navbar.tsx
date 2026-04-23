@@ -33,6 +33,25 @@ export default function Navbar() {
     document.documentElement.classList.toggle("dark");
   };
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id.replace("#", ""));
+    if (element) {
+      const offset = 80; // Adjust for navbar height
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+      
+      if (isMobileMenuOpen) setIsMobileMenuOpen(false);
+    }
+  };
+
   const navLinks = [
     { name: "Methodology", href: "#how-it-works" },
     { name: "Capabilities", href: "#features" },
@@ -64,14 +83,15 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-10">
             <div className="flex items-center gap-8">
               {navLinks.map((link) => (
-                <Link
+                <a
                   key={link.name}
                   href={link.href}
+                  onClick={(e) => scrollToSection(e, link.href)}
                   className="text-[11px] font-black uppercase tracking-[0.2em] text-muted-foreground hover:text-brand transition-all relative group"
                 >
                   {link.name}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand transition-all group-hover:w-full" />
-                </Link>
+                </a>
               ))}
             </div>
             
@@ -83,12 +103,12 @@ export default function Navbar() {
               >
                 {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
               </button>
-              <Link
-                href="#demo"
+              <button
+                onClick={(e) => scrollToSection(e, "#demo")}
                 className="px-6 py-2.5 bg-foreground text-background rounded-full text-[11px] font-black uppercase tracking-widest hover:scale-105 transition-all active:scale-95 shadow-lg"
               >
                 Launch Hub
-              </Link>
+              </button>
             </div>
           </div>
 
@@ -122,24 +142,23 @@ export default function Navbar() {
             <div className="bg-card/90 backdrop-blur-3xl border border-border/50 rounded-[2.5rem] p-8 shadow-2xl flex flex-col gap-8">
               <div className="flex flex-col gap-6">
                 {navLinks.map((link) => (
-                  <Link
+                  <a
                     key={link.name}
                     href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={(e) => scrollToSection(e, link.href)}
                     className="text-2xl font-black tracking-tight hover:text-brand transition-colors px-2"
                   >
                     {link.name}
-                  </Link>
+                  </a>
                 ))}
               </div>
               <div className="h-px bg-border/50" />
-              <Link
-                href="#demo"
-                onClick={() => setIsMobileMenuOpen(false)}
+              <button
+                onClick={(e) => scrollToSection(e, "#demo")}
                 className="w-full py-5 bg-brand text-brand-foreground rounded-[2rem] text-center font-black uppercase tracking-widest text-sm shadow-xl shadow-brand/20 active:scale-95 transition-transform"
               >
                 Launch Demo
-              </Link>
+              </button>
             </div>
           </motion.div>
         )}
