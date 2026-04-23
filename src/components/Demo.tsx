@@ -142,20 +142,16 @@ export default function Demo() {
   const highlightCode = (code: string) => {
     if (!code) return "";
     
-    // 1. Strip markdown code blocks if present
-    let cleanCode = code;
-    const markdownMatch = code.match(/```(?:\w+)?\n?([\s\S]*?)```/);
-    if (markdownMatch) {
-      cleanCode = markdownMatch[1].trim();
-    } else {
-      cleanCode = code.trim();
-    }
+    // 1. Strip markdown code blocks & HTML tags from AI (defensive)
+    let cleanCode = code
+      .replace(/```(?:\w+)?\n?([\s\S]*?)```/g, '$1')
+      .replace(/<[^>]*>?/gm, '')
+      .trim();
     
     // 2. Escape utility
     const escape = (str: string) => str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-    // 3. Define token patterns (Single pass regex to avoid nesting)
-    // Priority: Comments > Strings > Keywords > Constants > Functions > Classes > Numbers
+    // 3. Tokenize Patterns (Single Pass)
     const tokenRegex = /(\/\/.+)|(['"`].*?['"`])|\b(const|let|var|function|return|if|else|for|while|import|export|from|class|try|catch|async|await|def|with|as|yield|lambda|type|interface|enum)\b|\b(true|false|null|undefined|None)\b|(\w+)(?=\s*\()|\b([A-Z]\w+)\b|\b(\d+)\b/g;
 
     const parts = [];
@@ -163,11 +159,8 @@ export default function Demo() {
     let match;
 
     while ((match = tokenRegex.exec(cleanCode)) !== null) {
-      // Add text before the match
       parts.push(escape(cleanCode.substring(lastIndex, match.index)));
-      
       const [full, com, str, key, con, fn, cls, num] = match;
-      
       if (com) parts.push(`<span class="text-slate-500 italic">${escape(com)}</span>`);
       else if (str) parts.push(`<span class="text-[#98c379]">${escape(str)}</span>`);
       else if (key) parts.push(`<span class="text-[#c678dd]">${key}</span>`);
@@ -176,13 +169,9 @@ export default function Demo() {
       else if (cls) parts.push(`<span class="text-[#e5c07b]">${cls}</span>`);
       else if (num) parts.push(`<span class="text-[#d19a66]">${num}</span>`);
       else parts.push(escape(full));
-
       lastIndex = tokenRegex.lastIndex;
     }
-    
-    // Add remaining text
     parts.push(escape(cleanCode.substring(lastIndex)));
-
     return parts.join("");
   };
 

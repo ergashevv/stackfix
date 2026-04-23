@@ -24,7 +24,11 @@ export async function POST(req: Request) {
 Analyze the provided error message or stack trace.
 Explain the error clearly, identify the probable root cause, and provide actionable fix steps.
 
-In addition to explanation, return a structured JSON response EXACTLY with these fields:
+CRITICAL: Return and EXACTLY structured JSON response. 
+Ensure 'before_code' and 'after_code' fields contain PLAIN TEXT code ONLY. 
+DO NOT use markdown backticks (\`\`\`) or HTML tags inside the JSON values.
+
+JSON Structure:
 {
   "language": "e.g. JavaScript, Python, etc.",
   "framework": "e.g. React, Next.js, Django, or 'Vanilla' if none",
@@ -34,9 +38,9 @@ In addition to explanation, return a structured JSON response EXACTLY with these
   "root_cause": "The technical reason why this error occurred.",
   "fix_steps": ["Step 1", "Step 2"],
   "fix_summary": "1 line summary of the fix",
-  "before_code": "The original problematic code snippet (if identifiable) or a representation of the issue",
-  "after_code": "The fixed version of the code",
-  "confidence": 0.0-1.0, (number representing your certainty)
+  "before_code": "The original problematic code snippet (plain text)",
+  "after_code": "The fixed version of the code (plain text)",
+  "confidence": 0.0-1.0, 
   "search_query": "Optimized search query for Stack Overflow (3-5 words)"
 }
 
