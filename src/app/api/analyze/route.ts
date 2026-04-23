@@ -74,8 +74,8 @@ ${userInput}`;
       break;
     }
 
-    if (!geminiRes.ok) {
-      const errorData = await geminiRes.json().catch(() => ({}));
+    if (!geminiRes || !geminiRes.ok) {
+      const errorData = geminiRes ? await geminiRes.json().catch(() => ({})) : {};
       console.error("Gemini API Error Response:", errorData);
       
       // If we've exhausted retries or hit a non-retryable error
