@@ -42,7 +42,7 @@ export default function Hero() {
               <span>The Future of Debugging</span>
             </motion.div>
             
-            <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-8 leading-[0.9] text-foreground">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tight mb-8 leading-[0.9] text-foreground">
               Debug with <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-br from-brand via-indigo-400 to-accent-amber">
                 Intelligence.

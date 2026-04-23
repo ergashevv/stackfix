@@ -86,12 +86,27 @@ export default function RootLayout({
               (function() {
                 try {
                   const storedTheme = localStorage.getItem('theme');
-                  const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-                  if (storedTheme === 'dark' || (!storedTheme && supportDarkMode)) {
-                    document.documentElement.classList.add('dark');
-                  } else {
-                    document.documentElement.classList.remove('dark');
+                  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                  
+                  function updateTheme(isDark) {
+                    if (isDark) {
+                      document.documentElement.classList.add('dark');
+                    } else {
+                      document.documentElement.classList.remove('dark');
+                    }
                   }
+
+                  if (storedTheme === 'dark' || (!storedTheme && mediaQuery.matches)) {
+                    updateTheme(true);
+                  } else {
+                    updateTheme(false);
+                  }
+
+                  mediaQuery.addEventListener('change', function(e) {
+                    if (!localStorage.getItem('theme')) {
+                      updateTheme(e.matches);
+                    }
+                  });
                 } catch (e) {}
               })();
             `,

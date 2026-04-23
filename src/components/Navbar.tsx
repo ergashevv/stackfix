@@ -26,7 +26,28 @@ export default function Navbar() {
       setTheme("light");
     }
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Listener for system theme changes
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+      const storedTheme = localStorage.getItem("theme");
+      // Only auto-update if no manual preference is stored in localStorage
+      if (!storedTheme) {
+        const isDark = e.matches;
+        setTheme(isDark ? "dark" : "light");
+        if (isDark) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      mediaQuery.removeEventListener("change", handleSystemThemeChange);
+    };
   }, []);
 
   const toggleTheme = () => {
